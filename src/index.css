@@ -32,6 +32,7 @@ body {
   overflow-x: hidden;
   font-family: "Round", sans-serif;
   background-color: black;
+  user-select: none;
 }
 
 main {
@@ -275,4 +276,79 @@ main {
 
 .lucia-life-content {
   background: radial-gradient(ellipse, #111117 20%, transparent 70%);
+}
+
+/* Rockstar Loader Styles */
+.rockstar-loader {
+  background-image: linear-gradient(189deg, rgb(31, 31, 56) 0.55%, rgb(24, 24, 45) 30.38%, rgb(17, 18, 34) 65.19%, rgb(12, 13, 27) 100%);
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rockstar-logo-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.rockstar-logo-base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  filter: brightness(2) invert(1);
+}
+
+.rockstar-logo-masked {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  mask-image: url("/images/rockstargames.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/images/rockstargames.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.rockstar-logo-shine {
+  content: "";
+  background: linear-gradient(232deg, #fff9cb 20%, #988bd0 70%);
+  filter: blur(5px);
+  width: 40%;
+  height: 160%;
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  transform: skewX(-45deg);
+  animation: rockstar-shine-anim 2.15s cubic-bezier(.77, 0, .175, 1) infinite;
+}
+
+@keyframes rockstar-shine-anim {
+  0% {
+    top: -40%;
+    left: -40%;
+  }
+
+  92% {
+    top: 80%;
+    left: 105%;
+  }
+
+  100% {
+    top: 80%;
+    left: 105%;
+  }
 }
