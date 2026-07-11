@@ -4,6 +4,7 @@ import HeroSection from "./components/Hero"
 import Loader from "./components/Loader"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/all"
+import FirstVideo from "./components/FirstVideo"
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +17,7 @@ const App = () => {
       {loading && <Loader onComplete={() => setLoading(false)} />}
       <Navbar />
       <HeroSection />
+      <FirstVideo />
     </main>
   )
 }
