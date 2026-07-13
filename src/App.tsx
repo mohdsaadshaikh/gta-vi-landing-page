@@ -1,38 +1,28 @@
-import { useState } from "react"
-import Navbar from "./components/Navbar"
-import HeroSection from "./components/Hero"
-import Loader from "./components/Loader"
-import gsap from "gsap"
-import { ScrollTrigger, ScrollSmoother } from "gsap/all"
-import { useGSAP } from "@gsap/react"
-import Jason from "./components/Jason"
+import { useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
+import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+import Loader from "./components/Loader";
+import Navbar from "./components/Navbar";
+import HeroSection from "./components/Hero";
+import Jason from "./components/Jason";
+import Lucia from "./components/Lucia";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const App = () => {
   const [loading, setLoading] = useState(true);
-
-  useGSAP(() => {
-    ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 2,
-      effects: true,
-    });
-  }, []);
 
   return (
     <main>
       {loading && <Loader onComplete={() => setLoading(false)} />}
       <Navbar />
-      <div id="smooth-wrapper">
-        <div id="smooth-content">
-          <HeroSection />
-          <Jason />
-        </div>
-      </div>
+      <HeroSection />
+      <Jason />
+      <Lucia />
     </main>
-  )
-}
+  );
+};
 
-export default App
+export default App;
