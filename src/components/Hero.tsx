@@ -4,66 +4,91 @@ import { useGSAP } from "@gsap/react";
 // @ts-ignore
 import { useMaskSettings } from "../constants";
 // @ts-ignore
-import ComingSoon from "./ComingSoon"
+import ComingSoon from "./ComingSoon";
 
 const Hero = () => {
-    const { initialMaskPos, initialMaskSize, maskSize } = useMaskSettings();
+  const { initialMaskPos, initialMaskSize, maskSize } = useMaskSettings();
 
-    useGSAP(() => {
-        gsap.set('.mask-wrapper', {
-            maskPosition: initialMaskPos,
-            maskSize: initialMaskSize,
-        });
-
-        gsap.set('.mask-logo', { marginTop: '-100vh', opacity: 0 });
-
-        gsap.set('.entrance-message', { marginTop: '0vh' });
-
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: '.hero-section',
-                start: 'top top',
-                scrub: 2.5,
-                end: '+=200%',
-                pin: true,
-            }
-        })
-
-        tl
-            .to('.fade-out', { opacity: 0, ease: 'power1.inOut' })
-            .to('.scale-out', { scale: 1, ease: 'power1.inOut' })
-            .to('.mask-wrapper', { maskSize, ease: 'power1.inOut' }, '<')
-            .to('.mask-wrapper', { opacity: 0 })
-            .to('.overlay-logo', {
-                opacity: 1, onComplete: () => {
-                    gsap.to('.overlay-logo', { opacity: 0 });
-                }
-            }, '<')
-            .to('.entrance-message', { duration: 1, ease: 'power1.inOut', maskImage: 'radial-gradient(circle at 50% 0vh, black 50%, transparent 100%)' }, '<')
+  useGSAP(() => {
+    gsap.set(".mask-wrapper", {
+      maskPosition: initialMaskPos,
+      maskSize: initialMaskSize,
     });
 
-    return (
-        <section className="hero-section">
-            <div className="size-full mask-wrapper">
-                <img src="/images/hero-bg.png" alt="background" className="scale-out" />
-                <img src="/images/hero-text.webp" alt="hero-logo" className="title-logo fade-out" />
-                <img src="/images/watch-trailer.png" alt="trailer" className="trailer-logo fade-out" />
-                <div className="play-img fade-out">
-                    <img src="/images/play.png" alt="play" className="w-7 ml-1" />
-                </div>
-            </div>
+    gsap.set(".mask-logo", { marginTop: "-100vh", opacity: 0 });
 
-            <div>
-                <img src="/images/big-hero-text.svg" alt="logo" className="size-full object-cover mask-logo" />
-            </div>
+    gsap.set(".entrance-message", { marginTop: "0vh" });
 
-            <div className="fake-logo-wrapper">
-                <img src="/images/big-hero-text.svg" className="overlay-logo" />
-            </div>
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".hero-section",
+        start: "top top",
+        scrub: 2.5,
+        end: "+=200%",
+        pin: true,
+      },
+    });
 
-            <ComingSoon />
-        </section>
-    )
-}
+    tl.to(".fade-out", { opacity: 0, ease: "power1.inOut" })
+      .to(".scale-out", { scale: 1, ease: "power1.inOut" })
+      .to(".mask-wrapper", { maskSize, ease: "power1.inOut" }, "<")
+      .to(".mask-wrapper", { opacity: 0 })
+      .to(
+        ".overlay-logo",
+        {
+          opacity: 1,
+          onComplete: () => {
+            gsap.to(".overlay-logo", { opacity: 0 });
+          },
+        },
+        "<",
+      )
+      .to(
+        ".entrance-message",
+        {
+          duration: 1,
+          ease: "power1.inOut",
+          maskImage:
+            "radial-gradient(circle at 50% 0vh, black 50%, transparent 100%)",
+        },
+        "<",
+      );
+  });
 
-export default Hero
+  return (
+    <section className="hero-section">
+      <div className="size-full mask-wrapper">
+        <img src="/images/hero-bg.png" alt="background" className="scale-out" />
+        <img
+          src="/images/hero-text.webp"
+          alt="hero-logo"
+          className="title-logo fade-out"
+        />
+        <img
+          src="/images/watch-trailer.png"
+          alt="trailer"
+          className="trailer-logo fade-out"
+        />
+        <div className="play-img fade-out">
+          <img src="/images/play.png" alt="play" className="w-7 ml-1" />
+        </div>
+      </div>
+
+      <div>
+        <img
+          src="/images/big-hero-text.svg"
+          alt="logo"
+          className="size-full object-cover mask-logo"
+        />
+      </div>
+
+      <div className="fake-logo-wrapper">
+        <img src="/images/big-hero-text.svg" className="overlay-logo" />
+      </div>
+
+      <ComingSoon />
+    </section>
+  );
+};
+
+export default Hero;

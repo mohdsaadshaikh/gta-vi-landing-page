@@ -1,11 +1,38 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
+import { useFrameSequence } from "../hooks/useFrameSequence";
+
+const FRAME_COUNT = 89;
+const FRAME_PATH = (i: number) =>
+  `/videos/frames/lucia/lucia_${String(i + 1).padStart(4, "0")}.webp`;
 
 const Lucia = () => {
-  const videoRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const { readyToAnimate, getBestAvailableFrame } = useFrameSequence({
+    frameCount: FRAME_COUNT,
+    getFramePath: FRAME_PATH,
+    priorityCount: 10,
+  });
+
+  const drawFrame = (index: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const img = getBestAvailableFrame(index);
+    if (!img) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  };
 
   useGSAP(() => {
+    if (!readyToAnimate) return;
+
+    drawFrame(0);
+
     gsap.set(".lucia", { marginTop: "-60vh", opacity: 0 });
 
     const tl = gsap.timeline({
@@ -20,17 +47,17 @@ const Lucia = () => {
 
     tl.to(".lucia", { opacity: 1, duration: 1, ease: "power1.inOut" });
 
-    videoRef.current.onloadedmetadata = () => {
-      tl.to(
-        videoRef.current,
-        {
-          currentTime: videoRef.current.duration,
-          duration: 3,
-          ease: "power1.inOut",
-        },
-        "<",
-      );
-    };
+    const frameProxy = { frame: 0 };
+    tl.to(
+      frameProxy,
+      {
+        frame: FRAME_COUNT - 1,
+        duration: 3,
+        ease: "power1.inOut",
+        onUpdate: () => drawFrame(Math.round(frameProxy.frame)),
+      },
+      "<",
+    );
 
     gsap.set(".lucia-life", { marginTop: "-80vh" });
 
@@ -56,70 +83,25 @@ const Lucia = () => {
       duration: 1,
       ease: "power1.inOut",
     });
-
-    // Reveal Animations (Wipe and Zoom)
-    gsap.fromTo(
-      ".lucia-reveal-1",
-      { clipPath: "inset(100% 0 0 0)", scale: 1.25 },
-      {
-        clipPath: "inset(0% 0 0 0)",
-        scale: 1,
-        duration: 1.8,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: ".lucia-1",
-          start: "top 85%",
-          toggleActions: "play reverse play reverse",
-        },
-      },
-    );
-
-    gsap.fromTo(
-      ".lucia-reveal-2",
-      { clipPath: "inset(100% 0 0 0)", scale: 1.25 },
-      {
-        clipPath: "inset(0% 0 0 0)",
-        scale: 1,
-        duration: 1.8,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: ".lucia-2",
-          start: "top 85%",
-          toggleActions: "play reverse play reverse",
-        },
-      },
-    );
-
-    gsap.fromTo(
-      ".lucia-reveal-3",
-      { clipPath: "inset(100% 0 0 0)", scale: 1.25 },
-      {
-        clipPath: "inset(0% 0 0 0)",
-        scale: 1,
-        duration: 1.8,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: ".lucia-3",
-          start: "top 85%",
-          toggleActions: "play reverse play reverse",
-        },
-      },
-    );
-  });
+  }, [readyToAnimate]);
 
   return (
     <>
       <section className="lucia">
         <div className="h-dvh">
-          <video
-            ref={videoRef}
-            muted
-            playsInline
-            preload="auto"
-            src="/videos/output2.mp4"
+          {!readyToAnimate && (
+            <div className="size-full flex items-center justify-center bg-black text-white">
+              Loading...
+            </div>
+          )}
+          <canvas
+            ref={canvasRef}
+            width={1280}
+            height={720}
             className="size-full object-cover second-vd"
             style={{
               objectPosition: "15% 0%",
+              display: readyToAnimate ? "block" : "none",
             }}
           />
         </div>
